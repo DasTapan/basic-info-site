@@ -4,8 +4,10 @@ const fsp = require("node:fs/promises");
 const server = http.createServer();
 
 server.on("request", (req, res) => {
-  const pathname = req.url;
-  const fileName = `.${pathname === "/" ? "/index" : pathname}.html`;
+  const route = new URL(req.url, `http://${req.headers.host}`);
+  const fileName = `.${
+    route.pathname === "/" ? "/index" : route.pathname
+  }.html`;
 
   const writeContent = async () => {
     try {
